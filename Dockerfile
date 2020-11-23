@@ -4,14 +4,16 @@ LABEL  maintainer="Thach Canh Nhut"
 
 RUN rm -r /etc/hyperledger/fabric-ca-server
 
-ENV FABRIC_CA_HOME=/etc/hyperledger/ThuDuc-fabric-ca
-
-RUN mkdir /etc/hyperledger/ThuDuc-fabric-ca
+RUN mkdir /etc/hyperledger/fabric-ca-server
 
 COPY fabric-ca-server-config.yaml /etc/hyperledger/fabric-ca-server
 
-COPY fabric-ca-client-config.yaml /etc/hyperledger/fabric-ca-server
+RUN mkdir /etc/hyperledger/fabric-ca-client
 
-EXPOSE 7054
+ENV FABRIC_CA_CLIENT_HOME=/etc/hyperledger/fabric-ca-client
 
-CMD ["/bin/sh" "-c" "fabric-ca-server start -b admin:adminpw"]
+COPY fabric-ca-client-config.yaml /etc/hyperledger/fabric-ca-client
+
+EXPOSE 7052
+
+CMD fabric-ca-server start -b tlsadmin:tlsadminpw -d
